@@ -99,6 +99,9 @@ namespace Core.Communication.Tcp.Client
                 }
                 
                 packet.WriteLength();
+                
+                Logger.Debug("Sending packet...");
+                
                 _stream.BeginWrite(packet.ToArray(), 0, packet.Length(), SendCallback, null);
 
             }

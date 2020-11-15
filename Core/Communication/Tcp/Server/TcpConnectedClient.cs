@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Net.Security;
 using System.Net.Sockets;
 using Commons;
 using Core.Communication.Packets;
@@ -21,6 +22,15 @@ namespace Core.Communication.Tcp.Server
 
         public delegate void PacketHandler(Packet packet);
         private Dictionary<int, PacketHandler> _packetHandlers = new Dictionary<int, PacketHandler>();
+
+        public TcpConnectedClient()
+        {
+            _packetHandlers.Add((int)ClientPackets.Ping, packet =>
+            {
+                var message = packet.ReadString();
+                Logger.Debug($"Received message: {message}");
+            });
+        }
         
         public void Prepare(long id, TcpClient tcpClient)
         {
@@ -55,8 +65,8 @@ namespace Core.Communication.Tcp.Server
             catch (Exception e)
             {
                 Logger.Debug($"Error while receiving data from {_tcpClient.Client.RemoteEndPoint}");
-                //Console.WriteLine(e);
-                //throw;
+                Console.WriteLine(e);
+                throw;
             }
         }
 

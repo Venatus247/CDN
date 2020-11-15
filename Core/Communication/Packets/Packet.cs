@@ -22,11 +22,16 @@ namespace Core.Communication.Packets
 
     public class Packet : IDisposable
     {
+        [NonSerialized]
         private readonly Encoding _stringEncoding = Encoding.UTF8;
+        [NonSerialized]
         private List<byte> _buffer;
+        [NonSerialized]
         private byte[] _readableBuffer;
+        [NonSerialized]
         private int _readPosition;
-
+        
+        [NonSerialized]
         private bool _disposed;
         
         /// <summary>
@@ -44,7 +49,7 @@ namespace Core.Communication.Packets
         ///</summary>
         public Packet(int id)
         {
-            _buffer = new List<byte>(); // Intitialize buffer
+            _buffer = new List<byte>(); // Initialize buffer
             _readPosition = 0; // Set readPos to 0
 
             Write(id); // Write packet id to the buffer
@@ -56,7 +61,7 @@ namespace Core.Communication.Packets
         /// </summary>
         public Packet(byte[] data)
         {
-            _buffer = new List<byte>(); // Intitialize buffer
+            _buffer = new List<byte>(); // Initialize buffer
             _readPosition = 0; // Set readPos to 0
 
             SetBytes(data);
