@@ -12,6 +12,7 @@ using Core.Data.File;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 
 namespace API.Controllers
 {
@@ -30,8 +31,11 @@ namespace API.Controllers
             if (!request.IsComplete())
                 return Incomplete();
 
-            //if (!request.IsAuthorized())
-            //    return NoAuthorization();
+            request.SessionData.UserAgent = Request.Headers[HeaderNames.UserAgent];
+            
+            if (!request.IsAuthorized())
+                return Unauthorized(request.SessionData);
+                //return NoAuthorization();
 
             var uploadedFile = new UploadedFile()
             {
@@ -55,10 +59,11 @@ namespace API.Controllers
                 LastModified = DateTime.Now, //TODO check if file was modified and not newly created 
                 Version = 1.0, //TODO set version based on modification
                 AccessLevel = AccessLevel.Public, //TODO set based on user's settings
+                FileOwner = new AccountReference(request.Account.Id),
                 GrantedAccounts = new List<AccountReference>() //TODO set based on user's settings
             }, tempFileStream));
 
-            var savedFile = uploadedFile.ToSavedFile();
+            var savedFile = uploadedFile.ToSavedFile(request.Account);
 
             await FileController.Instance.Collection.InsertOneAsync(savedFile);
             

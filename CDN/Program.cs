@@ -73,6 +73,7 @@ namespace CDN
                             LastModified = fileHeader.LastModified,
                             Version = fileHeader.Version,
                             AccessLevel = fileHeader.AccessLevel,
+                            FileOwner = fileHeader.FileOwner,
                             GrantedAccounts = fileHeader.GrantedAccounts
                         }, fileStream.Name);
                         cdnClient.Send(new CdnSavedFileMessage()

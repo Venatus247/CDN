@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace API.Controllers.Models.File
 {
-    public class FileUploadRequest : BasicRequest
+    public class FileUploadRequest : AuthoritativeRequest
     {
         public IFormFile UploadedFile { get; set; }
         //public override AccessLevel RequiredAccessLevel { get; protected set; } = AccessLevel.User;
+        public override AccessLevel RequiredAccessLevel { get; protected set; } = AccessLevel.Public;
+
         public override bool IsComplete()
         {
             return UploadedFile != null;

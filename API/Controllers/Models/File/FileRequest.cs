@@ -5,6 +5,7 @@ namespace API.Controllers.Models.File
 {
     public class FileRequest : AuthoritativeRequest
     {
+        public bool DisableRedirect { get; set; } = false;
         public string FileId { get; set; }
         public override AccessLevel RequiredAccessLevel { get; protected set; } = AccessLevel.Public;
 

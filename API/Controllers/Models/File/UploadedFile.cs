@@ -20,7 +20,7 @@ namespace API.Controllers.Models.File
         [JsonIgnore]
         public IFormFile File { get; set; }
 
-        public SavedFile ToSavedFile()
+        public SavedFile ToSavedFile(Account account)
         {
             return new SavedFile()
             {
@@ -32,7 +32,8 @@ namespace API.Controllers.Models.File
                 Created = DateTime.Now,
                 LastModified = DateTime.Now,
                 Version = 1.0,
-                AccessLevel = AccessLevel.Public
+                AccessLevel = AccessLevel.Public,
+                FileOwner = new AccountReference(account.Id)
             };
         }
         
