@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Commons;
 using Core.Exceptions;
 
 //https://github.com/tom-weiland/tcp-udp-networking/blob/tutorial-part2/GameServer/GameServer/Packet.cs
@@ -8,16 +9,12 @@ using Core.Exceptions;
 
 namespace Core.Communication.Packets
 {
-    /// <summary>Sent from server to client.</summary>
-    public enum ServerPackets
+    /// <summary>Packet identifiers</summary>
+    public enum PacketCodes
     {
-        Ping = 1
-    }
-
-    /// <summary>Sent from client to server.</summary>
-    public enum ClientPackets
-    {
-        Ping = 1
+        Ping = 1,
+        FileHeader = 10,
+        FilePart = 11,
     }
 
     public class Packet : IDisposable
@@ -49,10 +46,10 @@ namespace Core.Communication.Packets
         ///</summary>
         public Packet(int id)
         {
-            _buffer = new List<byte>(); // Initialize buffer
-            _readPosition = 0; // Set readPos to 0
+            _buffer = new List<byte>();
+            _readPosition = 0;
 
-            Write(id); // Write packet id to the buffer
+            Write(id);
         }
 
         /// <summary>
@@ -61,12 +58,22 @@ namespace Core.Communication.Packets
         /// </summary>
         public Packet(byte[] data)
         {
-            _buffer = new List<byte>(); // Initialize buffer
-            _readPosition = 0; // Set readPos to 0
+            _buffer = new List<byte>();
+            _readPosition = 0;
 
             SetBytes(data);
         }
 
+        public Packet(int id, byte[] data)
+        {
+            Logger.Debug($"Writing packet id {id}");
+            _buffer = new List<byte>();
+            _readPosition = 0;
+
+            Write(id);
+            SetBytes(data);
+        }
+        
         #region Functions
         /// <summary>
         /// Sets the packet's content and prepares it to be read.

@@ -7,10 +7,11 @@ namespace API
 {
     public class Program
     {
+        public static CdnProxyServer CdnProxyServer;
         public static void Main(string[] args)
         {
-            var cdnProxy = new CdnProxyServer("127.0.0.1",4500);
-            cdnProxy.Start();
+            CdnProxyServer = new CdnProxyServer("127.0.0.1",4500);
+            CdnProxyServer.Start();
             
             BackendServer.Instance.OnStartup();
             CreateHostBuilder(args).Build().Run();
