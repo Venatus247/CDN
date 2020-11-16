@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using CDN.Controllers.Models.File;
+using Commons;
 using Core.Data.File;
-using Core.Utils;
 
 namespace CDN.Utils.Service
 {
@@ -12,6 +11,7 @@ namespace CDN.Utils.Service
 
         public static FileStream GetFileStream(SavedFile savedFile)
         {
+            Logger.Debug($"Path: {savedFile.GetPath()}");
             return File.OpenRead(savedFile.GetPath());
         }
 
@@ -25,38 +25,26 @@ namespace CDN.Utils.Service
             return await File.ReadAllBytesAsync(savedFile.GetPath());
         }
 
-        public static async Task<SavedFile> SaveFile(UploadedFile uploadedFile)
+        public static async Task<bool> SaveFile(SavedFile savedFile, string tempFile)
         {
             try
             {
-                var savedFile = new SavedFile()
-                {
-                    FileId = FileIdGenerator.Instance.GenerateId(),
-                    FileName = uploadedFile.FileName,
-                    ContentType = uploadedFile.ContentType,
-                    Description = uploadedFile.Description,
-                    Created = DateTime.Now,
-                    LastModified = DateTime.Now,
-                    Version = 1.0
-                };
                 
-                var baseDirectory = FileController.Instance.GetPathForNewFile(uploadedFile);
+                var baseDirectory = FileController.Instance.GetPathForNewFile(savedFile);
                 if (!Directory.Exists(baseDirectory))
                     Directory.CreateDirectory(baseDirectory);
 
-                await using (var stream = new FileStream(Path.Combine(baseDirectory, savedFile.FileId), FileMode.Create))
-                {
-                    await uploadedFile.File.CopyToAsync(stream);
-                }
+                File.Copy(tempFile, Path.Combine(baseDirectory, savedFile.FileId), false);
 
                 await FileController.Instance.Collection.InsertOneAsync(savedFile);
-                
-                return savedFile;
+
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return null;
+                //TODO handle file already exists possibility
+                return false;
             }
 
         }

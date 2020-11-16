@@ -38,6 +38,11 @@ namespace Core.Data.File
         {
             return Path.GetFullPath(FileStorageConfiguration.BaseDirectory);
         }
+
+        public string GetCdnId()
+        {
+            return FileStorageConfiguration.CdnId;
+        }
         
     }
 }

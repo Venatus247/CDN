@@ -7,12 +7,11 @@ namespace Core.Utils.Request
 {
     public abstract class AuthoritativeRequest : BasicRequest
     {
-
         [JsonIgnore]
         public abstract AccessLevel RequiredAccessLevel { get; protected set; }
-        
+
         public SessionData SessionData { get; set; }
-        
+
         [BsonIgnore]
         [JsonIgnore]
         private Account _account { get; set; }
@@ -38,7 +37,7 @@ namespace Core.Utils.Request
 
         public bool IsAuthorized()
         {
-            return Account != null && RequiredAccessLevel <= Account.AccessLevel;
+            return IsComplete() && Account != null && RequiredAccessLevel <= Account.AccessLevel;
         }
     }
 }

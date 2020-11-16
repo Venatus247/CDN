@@ -10,6 +10,7 @@ namespace API
         public static CdnProxyServer CdnProxyServer;
         public static void Main(string[] args)
         {
+            
             CdnProxyServer = new CdnProxyServer("127.0.0.1",4500);
             CdnProxyServer.Start();
             

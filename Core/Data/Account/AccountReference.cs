@@ -1,8 +1,16 @@
-﻿namespace Core.Data.Account
+﻿using System;
+using Core.Controller;
+
+namespace Core.Data.Account
 {
-    public class AccountReference
+    [Serializable]
+    public struct AccountReference : IMapped
     {
         public long AccountId { get; set; }
 
+        public AccountReference(long accountId)
+        {
+            AccountId = accountId;
+        }
     }
 }

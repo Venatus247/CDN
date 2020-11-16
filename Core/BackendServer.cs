@@ -12,7 +12,6 @@ namespace Core
 {
     public class BackendServer : Singleton<BackendServer>
     {
-        
         public const double Version = 1.01;
         public ConfigLoader ConfigLoader { get; private set; }
         public IMongoDatabase Database { get; private set; }

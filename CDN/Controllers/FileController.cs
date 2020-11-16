@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CDN.Controllers.Models.File;
 using CDN.Utils.Controller;
 using CDN.Utils.Service;
 using Core.Data.Account;
@@ -52,7 +51,7 @@ namespace CDN.Controllers
             return Ok(account);
         }
 
-        [Route("file/upload")]
+        /*[Route("file/upload")]
         public async Task<IActionResult> Upload([FromForm]FileUploadRequest request)
         {
             if (request == null)
@@ -68,10 +67,11 @@ namespace CDN.Controllers
                 File = request.UploadedFile
             };
 
-            var savedFile = await FilesService.SaveFile(uploadedFile);
+            //var savedFile = await FilesService.SaveFile(uploadedFile);
             
-            return savedFile != null ? Ok(savedFile) : Ok("Error");
-        }
+            //return savedFile != null ? Ok(savedFile) : Ok("Error");
+            return Ok();
+        }*/
         
         [HttpGet]
         [Route("file/get/{fileId}/{fileName}")]
@@ -87,7 +87,7 @@ namespace CDN.Controllers
             if (savedFile == null)
                 return FileNotFound();
 
-            if (savedFile.AccessLevel > AccessLevel.None)
+            if (savedFile.AccessLevel > AccessLevel.Public)
             {
                 return Ok("Missing access level");
             }

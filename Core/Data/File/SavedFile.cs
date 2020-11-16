@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Serialization;
 using Commons.Utils;
@@ -26,10 +27,22 @@ namespace Core.Data.File
         public DateTime Created { get; set; }
         public DateTime LastModified { get; set; }
         public double Version { get; set; }
-        public AccessLevel AccessLevel { get; set; } = AccessLevel.None;
+        public AccessLevel AccessLevel { get; set; } = AccessLevel.Public;
+        public List<AccountReference> GrantedAccounts { get; set; } = new List<AccountReference>();
+        
+        public List<CdnFileReference> FileStoredAt { get; protected set; } = new List<CdnFileReference>();
         public string GetPath()
         {
             return Path.Combine(FileController.Instance.GetBaseDirectory(this), FileId);
+        }
+
+        public CdnFileReference GetRandomCdnFileReference()
+        {
+            if (FileStoredAt.Count == 0)
+                return null;
+            
+            var random = new Random().Next(0, FileStoredAt.Count-1);
+            return FileStoredAt[random];
         }
         
     }

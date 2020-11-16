@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Controllers.Models.File;
 using API.Utils.Controller;
@@ -6,6 +7,8 @@ using API.Utils.Service;
 using Commons.Utils;
 using Core.Communication.Messages;
 using Core.Communication.States;
+using Core.Data.Account;
+using Core.Data.File;
 using Core.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,6 +21,8 @@ namespace API.Controllers
         {
         }
 
+        //[RequestSizeLimit(52428800)] //50MB
+        [DisableRequestSizeLimit]
         [Route("file/upload")]
         public async Task<IActionResult> Upload([FromForm]FileUploadRequest request)
         {
@@ -38,12 +43,8 @@ namespace API.Controllers
 
             var tempFileStream = await FilesService.SaveTempFileAndGetFileStream(uploadedFile);
             
+            //TODO use cdn dynamically 
             var cdnTcpConnection = Program.CdnProxyServer.GetClientConnection(1);
-            
-            Commons.Logger.Debug($"Client: {cdnTcpConnection != null}");
-            
-            cdnTcpConnection.Send(new PingMessage("Pong!").ToPacket());
-            
             cdnTcpConnection.SendFile(new CdnFileState(new FileHeaderMessage()
             {
                 FileId = uploadedFile.FileId,
@@ -52,8 +53,14 @@ namespace API.Controllers
                 Description = uploadedFile.Description,
                 Created = DateTime.Now,
                 LastModified = DateTime.Now, //TODO check if file was modified and not newly created 
-                Version = 1.0 //TODO set version based on modification
+                Version = 1.0, //TODO set version based on modification
+                AccessLevel = AccessLevel.Public, //TODO set based on user's settings
+                GrantedAccounts = new List<AccountReference>() //TODO set based on user's settings
             }, tempFileStream));
+
+            var savedFile = uploadedFile.ToSavedFile();
+
+            await FileController.Instance.Collection.InsertOneAsync(savedFile);
             
             return Ok(uploadedFile);
         }

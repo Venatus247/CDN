@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
+using System.Threading;
 using Commons;
 using Core.Communication.Packets;
 using Core.Communication.States;
@@ -97,6 +98,9 @@ namespace Core.Communication.Tcp
                 packet.WriteLength();
                 
                 Logger.Debug("Sending next file packet...");
+                
+                Thread.Sleep(10);
+                
                 Stream.BeginWrite(packet.ToArray(), 0, packet.Length(), SendFileCallback, fileState);
 
             }
@@ -130,38 +134,48 @@ namespace Core.Communication.Tcp
         
         private bool HandleByteData(byte[] data)
         {
-            ReceivedPacket.SetBytes(data);
-
-            if (ReceivedPacket.UnreadLength() < 4)
-                return false;
-
-            var packetLength = ReceivedPacket.ReadInt();
-
-            Logger.Debug($"Packet Length: {packetLength}");
-            
-            if (packetLength <= 0)
-                return true;
-
-            while (packetLength > 0 && packetLength <= ReceivedPacket.UnreadLength())
+            try
             {
-                var packetBytes = ReceivedPacket.ReadBytes(packetLength);
-                using (var packet = new Packet(packetBytes))
-                {
-                    var packetId = packet.ReadInt();
-                    Logger.Debug($"Packet ID: {packetId}");
-                    PacketHandlers[packetId](packet);
-                }
+                ReceivedPacket.SetBytes(data);
 
-                packetLength = 0;
-                if (ReceivedPacket.UnreadLength() < 4) continue;
-                
-                packetLength = ReceivedPacket.ReadInt();
+                if (ReceivedPacket.UnreadLength() < 4)
+                    return false;
+
+                var packetLength = ReceivedPacket.ReadInt();
+
+                Logger.Debug($"Packet Length: {packetLength}");
+            
                 if (packetLength <= 0)
                     return true;
 
+                while (packetLength > 0 && packetLength <= ReceivedPacket.UnreadLength())
+                {
+                    var packetBytes = ReceivedPacket.ReadBytes(packetLength);
+                    using (var packet = new Packet(packetBytes))
+                    {
+                        var packetId = packet.ReadInt();
+                        Logger.Debug($"Packet ID: {packetId}");
+                        PacketHandlers[packetId](packet);
+                    }
+
+                    packetLength = 0;
+                    if (ReceivedPacket.UnreadLength() < 4) continue;
+                
+                    packetLength = ReceivedPacket.ReadInt();
+                    if (packetLength <= 0)
+                        return true;
+
+                }
+
+                return packetLength <= 1;
+            }
+            catch (Exception e)
+            {
+                Logger.Exception(e);
+                //TODO handle exception
             }
 
-            return packetLength <= 1;
+            return false;
         }
         
         public void Invoke(PacketCodes identifier, PacketHandler handler)

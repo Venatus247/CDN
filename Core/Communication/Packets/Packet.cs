@@ -15,6 +15,8 @@ namespace Core.Communication.Packets
         Ping = 1,
         FileHeader = 10,
         FilePart = 11,
+        CdnConnected = 15,
+        CdnSavedFile = 20
     }
 
     public class Packet : IDisposable
