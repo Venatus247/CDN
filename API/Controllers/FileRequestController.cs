@@ -54,17 +54,13 @@ namespace API.Controllers
             });
 
             if (savedFile == null)
-            {
                 return FileNotFound();
-            }
 
             if (savedFile.AccessLevel > AccessLevel.Public)
             {
                 request.SessionData.UserAgent = Request.Headers[HeaderNames.UserAgent];
                 if (!request.IsAuthorized())
-                {
                     return NoAuthorization();
-                }
 
                 if (!savedFile.FileOwner.AccountId.Equals(request.Account.Id) &&
                     !savedFile.GrantedAccounts.Contains(new AccountReference(request.Account.Id)))

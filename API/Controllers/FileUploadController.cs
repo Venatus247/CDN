@@ -34,8 +34,7 @@ namespace API.Controllers
             request.SessionData.UserAgent = Request.Headers[HeaderNames.UserAgent];
             
             if (!request.IsAuthorized())
-                return Unauthorized(request.SessionData);
-                //return NoAuthorization();
+                return NoAuthorization();
 
             var uploadedFile = new UploadedFile()
             {
@@ -47,7 +46,7 @@ namespace API.Controllers
 
             var tempFileStream = await FilesService.SaveTempFileAndGetFileStream(uploadedFile);
             
-            //TODO use cdn dynamically 
+            //TODO get cdn dynamically 
             var cdnTcpConnection = Program.CdnProxyServer.GetClientConnection(1);
             cdnTcpConnection.SendFile(new CdnFileState(new FileHeaderMessage()
             {

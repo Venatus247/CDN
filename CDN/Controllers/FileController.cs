@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CDN.Controllers.Models.File;
 using CDN.Utils.Controller;
 using CDN.Utils.Service;
 using Core.Data.Account;
@@ -16,7 +17,7 @@ namespace CDN.Controllers
         public FileController(ILogger<FileController> logger) : base(logger)
         {
         }
-
+        /*
         [Route("user/add")]
         public IActionResult AddAccount()
         {
@@ -49,47 +50,41 @@ namespace CDN.Controllers
             AccountController.Instance.Collection.InsertOne(account);
             
             return Ok(account);
-        }
-
-        /*[Route("file/upload")]
-        public async Task<IActionResult> Upload([FromForm]FileUploadRequest request)
-        {
-            if (request == null)
-                return BadRequest();
-            
-            if (!request.IsComplete())
-                return Incomplete();
-            
-            var uploadedFile = new UploadedFile()
-            {
-                FileName = request.UploadedFile.FileName,
-                ContentType = request.UploadedFile.ContentType,
-                File = request.UploadedFile
-            };
-
-            //var savedFile = await FilesService.SaveFile(uploadedFile);
-            
-            //return savedFile != null ? Ok(savedFile) : Ok("Error");
-            return Ok();
         }*/
         
         [HttpGet]
         [Route("file/get/{fileId}/{fileName}")]
-        public async Task<object> Download([FromRoute]string fileId, [FromRoute]string fileName, [FromForm]SessionData sessionData)
+        public async Task<object> Download(string fileId, string fileName)
         {
-            //TODO implement file access levels, a.e. public, restricted
-            
-            var savedFile = await Core.Data.File.FileController.Instance.TryGetFile(new RequestedFileInfo()
+            var request = new FileDownloadRequest()
             {
-                FileId = fileId
-            });
+                FileId = fileId,
+                FileName = fileName,
+                SessionData = new SessionData()
+            };
+            
+            if (!request.IsComplete())
+                return Incomplete();
+            
+            var savedFile = await Core.Data.File.FileController.Instance.TryGetFile(request.CreateFileInfo());
 
             if (savedFile == null)
                 return FileNotFound();
 
             if (savedFile.AccessLevel > AccessLevel.Public)
             {
-                return Ok("Missing access level");
+                if (request.SessionData.SessionToken == null && Request.Cookies.ContainsKey("SessionToken"))
+                    request.SessionData.SessionToken = Request.Cookies["SessionToken"];
+                    
+                request.SessionData.UserAgent = Request.Headers[HeaderNames.UserAgent];
+                if (!request.IsAuthorized())
+                    return NoAuthorization();
+
+                if (!savedFile.FileOwner.AccountId.Equals(request.Account.Id) &&
+                    !savedFile.GrantedAccounts.Contains(new AccountReference(request.Account.Id)))
+                {
+                    return NoAuthorization();
+                }
             }
 
             return new FileStreamResult(FilesService.GetFileStream(savedFile), savedFile.ContentType)
