@@ -1,4 +1,5 @@
-﻿using Commons.Configuration;
+﻿using System;
+using Commons.Configuration;
 
 namespace Core.Configuration
 {
@@ -11,7 +12,7 @@ namespace Core.Configuration
 
         public void LoadDefault()
         {
-            CdnId = null;
+            CdnId = Guid.NewGuid().ToString();
             BaseDirectory = "uploads";
         }
     }
