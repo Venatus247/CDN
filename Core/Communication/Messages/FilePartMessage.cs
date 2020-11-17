@@ -6,7 +6,7 @@ namespace Core.Communication.Messages
     [Serializable]
     public class FilePartMessage : SerializedPacket<FilePartMessage>
     {
-        public const long DefaultContentLength = 4000;
+        public const long DefaultContentLength = 32768;
 
         public long ContentLength = DefaultContentLength;
         public string FileId { get; set; }
