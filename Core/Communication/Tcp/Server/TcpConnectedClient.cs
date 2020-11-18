@@ -1,3 +1,5 @@
+using System;
+using System.Net;
 using System.Net.Sockets;
 using Commons;
 using Core.Communication.Messages;
@@ -29,17 +31,42 @@ namespace Core.Communication.Tcp.Server
         
         public void Prepare(long id, TcpClient client)
         {
-            Id = id;
-            Client = client;
+            try
+            {
+                Id = id;
+                Client = client;
             
-            Client.ReceiveBufferSize = DataBufferSize;
-            Client.SendBufferSize = DataBufferSize;
+                Client.ReceiveBufferSize = DataBufferSize;
+                Client.SendBufferSize = DataBufferSize;
 
-            Stream = Client.GetStream();
+                Stream = Client.GetStream();
             
-            ReceivedBuffer = new byte[DataBufferSize];
+                ReceivedBuffer = new byte[DataBufferSize];
 
-            Stream.BeginRead(ReceivedBuffer, 0, DataBufferSize, ReceiveCallback, null);
+                Stream.BeginRead(ReceivedBuffer, 0, DataBufferSize, ReceiveCallback, null);
+            }
+            catch (Exception e)
+            {
+                Logger.Exception(e);
+            }
+        }
+
+        public string IpAddress()
+        {
+            var ipEndPoint = Client.Client.RemoteEndPoint as IPEndPoint;
+            return ipEndPoint?.Address.ToString().Replace($":{ipEndPoint.Port}", "");
+
+            //return ((IPEndPoint)Client.Client.RemoteEndPoint).Address.ToString();
+        }
+        
+        protected override void HandleConnectionReset(SocketException e)
+        {
+            
+        }
+
+        public void Kick()
+        {
+            Client.Close();
         }
         
     }

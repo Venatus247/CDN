@@ -2,6 +2,7 @@
 using System.IO;
 using Commons;
 using Core.Communication.Messages;
+using Core.Communication.Messages.File;
 using Core.Communication.Packets;
 
 namespace Core.Communication.States

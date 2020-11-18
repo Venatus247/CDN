@@ -13,6 +13,7 @@ namespace Core.Communication.Packets
     public enum PacketCodes
     {
         Ping = 1,
+        CdnAuth = 8,
         FileHeader = 10,
         FilePart = 11,
         CdnConnected = 15,

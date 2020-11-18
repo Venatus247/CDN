@@ -43,6 +43,16 @@ namespace Core.Data.File
         {
             return FileStorageConfiguration.CdnId;
         }
+
+        public string GetCdnToken()
+        {
+            return FileStorageConfiguration.CdnToken;
+        }
+
+        public string GetCdnUrlAddress()
+        {
+            return FileStorageConfiguration.CdnUrlAddress;
+        }
         
     }
 }

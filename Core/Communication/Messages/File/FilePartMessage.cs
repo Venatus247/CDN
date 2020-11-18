@@ -1,7 +1,7 @@
 ﻿using System;
 using Core.Communication.Packets;
 
-namespace Core.Communication.Messages
+namespace Core.Communication.Messages.File
 {
     [Serializable]
     public class FilePartMessage : SerializedPacket<FilePartMessage>

@@ -4,7 +4,7 @@ using Core.Communication.Packets;
 using Core.Data.Account;
 using Core.Data.File;
 
-namespace Core.Communication.Messages
+namespace Core.Communication.Messages.File
 {
     [Serializable]
     public class FileHeaderMessage : SerializedPacket<FileHeaderMessage>, ICdnFile

@@ -6,8 +6,11 @@ using CDN.Utils.Service;
 using Commons;
 using Core;
 using Core.Communication.Messages;
+using Core.Communication.Messages.Authentication;
+using Core.Communication.Messages.File;
 using Core.Communication.Packets;
 using Core.Communication.Tcp.Client;
+using Core.Data.Cdn;
 using Core.Data.File;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -93,9 +96,14 @@ namespace CDN
 
             cdnClient.Start();
             
-            cdnClient.Send(new CdnConnectedMessage()
+            cdnClient.Send(new CdnAuthMessage()
             {
-                CdnId = FileController.Instance.GetCdnId()
+                CdnReference = new CdnReference()
+                {
+                    CdnId = FileController.Instance.GetCdnId(),
+                    CdnAuthToken = FileController.Instance.GetCdnToken(),
+                    CdnUrlAddress = FileController.Instance.GetCdnUrlAddress()
+                }
             }.ToPacket());
             
             BackendServer.Instance.OnStartup();

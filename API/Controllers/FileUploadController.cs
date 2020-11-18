@@ -6,6 +6,7 @@ using API.Utils.Controller;
 using API.Utils.Service;
 using Commons.Utils;
 using Core.Communication.Messages;
+using Core.Communication.Messages.File;
 using Core.Communication.States;
 using Core.Data.Account;
 using Core.Data.File;

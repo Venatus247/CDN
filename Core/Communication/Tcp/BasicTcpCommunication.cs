@@ -127,8 +127,20 @@ namespace Core.Communication.Tcp
             }
             catch (Exception e)
             {
-                Logger.Debug($"Error while receiving data from {Client.Client.RemoteEndPoint}");
+                //TODO Access to Client.Client.RemoteEndPoint results is crash
+                try
+                {
+                    //not putting Client.Client.RemoteEndPoint in try will crash program
+                    Logger.Debug($"Error while receiving data {Client.Client.RemoteEndPoint}");
+                }
+                catch
+                {
+                    // ignored
+                }
+
                 Logger.Exception(e);
+                //TODO handle errors
+                //- disconnect is thrown here
             }
         }
         
@@ -182,6 +194,42 @@ namespace Core.Communication.Tcp
         {
             PacketHandlers.Add((int)identifier, handler);
         }
-        
+
+        protected virtual void HandleError(SocketException e)
+        {
+            switch (e.SocketErrorCode)
+            {
+                case SocketError.AccessDenied:
+                    HandleAccessDenied(e);
+                    return;
+                case SocketError.ConnectionAborted:
+                    HandleConnectionAborted(e);
+                    return;
+                case SocketError.ConnectionRefused:
+                    HandleConnectionRefused(e);
+                    return;
+                case SocketError.ConnectionReset:
+                    HandleConnectionReset(e);
+                    return;
+                    
+            }
+        }
+
+        protected virtual void HandleAccessDenied(SocketException e)
+        {
+            
+        }
+        protected virtual void HandleConnectionAborted(SocketException e)
+        {
+            
+        }
+        protected virtual void HandleConnectionRefused(SocketException e)
+        {
+            
+        }
+        protected virtual void HandleConnectionReset(SocketException e)
+        {
+            
+        }
     }
 }
