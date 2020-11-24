@@ -1,7 +1,7 @@
 ﻿using System;
-using Core.Communication.Packets;
+using Communication.Packets;
 
-namespace Core.Communication.Messages
+namespace Communication.Messages
 {
     [Serializable]
     public class PingMessage : SerializedPacket<PingMessage>

@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDN", "CDN\CDN.csproj", "{615A799C-FB3C-4CBA-B965-A82A86DAF123}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication", "Communication\Communication.csproj", "{7F954642-C03C-4B66-9DDD-80894BA7FB74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{615A799C-FB3C-4CBA-B965-A82A86DAF123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{615A799C-FB3C-4CBA-B965-A82A86DAF123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{615A799C-FB3C-4CBA-B965-A82A86DAF123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F954642-C03C-4B66-9DDD-80894BA7FB74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F954642-C03C-4B66-9DDD-80894BA7FB74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F954642-C03C-4B66-9DDD-80894BA7FB74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F954642-C03C-4B66-9DDD-80894BA7FB74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

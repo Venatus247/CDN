@@ -2,11 +2,11 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using Commons;
-using Core.Communication.Messages;
-using Core.Communication.Packets;
+using Communication.Messages;
+using Communication.Packets;
 using Core.Controller;
 
-namespace Core.Communication.Tcp.Server
+namespace Communication.Tcp.Server
 {
     public class TcpConnectedClient : BasicTcpCommunication, IIdentified
     {

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Net;
 using Commons;
-using Core.Communication.Messages;
-using Core.Communication.Messages.Authentication;
-using Core.Communication.Packets;
-using Core.Communication.Tcp.Server;
+using Communication.Messages;
+using Communication.Messages.Authentication;
+using Communication.Packets;
+using Communication.Tcp.Server;
 using Core.Data.Cdn;
 using Core.Data.File;
 using MongoDB.Driver;
 
-namespace Core.Communication.Synchronization
+namespace Communication.Synchronization
 {
     public class CdnProxyServer : BasicTcpServer<CdnClientConnection>
     {

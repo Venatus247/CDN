@@ -2,16 +2,9 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using Commons;
-using Core.Communication.Messages;
-using Core.Communication.Messages.Authentication;
-using Core.Communication.Packets;
-using Core.Data.Cdn;
-using Core.Data.File;
-using MongoDB.Driver;
 
-namespace Core.Communication.Tcp.Server
+namespace Communication.Tcp.Server
 {
     public class BasicTcpServer<TClient> where TClient : TcpConnectedClient, new()
     {

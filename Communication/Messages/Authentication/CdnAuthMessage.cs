@@ -1,8 +1,8 @@
 using System;
-using Core.Communication.Packets;
+using Communication.Packets;
 using Core.Data.Cdn;
 
-namespace Core.Communication.Messages.Authentication
+namespace Communication.Messages.Authentication
 {
     [Serializable]
     public class CdnAuthMessage : SerializedPacket<CdnAuthMessage>

@@ -4,10 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Threading;
 using Commons;
-using Core.Communication.Packets;
-using Core.Communication.States;
+using Communication.Packets;
+using Communication.States;
 
-namespace Core.Communication.Tcp
+namespace Communication.Tcp
 {
     public abstract class BasicTcpCommunication
     {

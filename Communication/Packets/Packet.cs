@@ -7,7 +7,7 @@ using Core.Exceptions;
 //https://github.com/tom-weiland/tcp-udp-networking/blob/tutorial-part2/GameServer/GameServer/Packet.cs
 //https://www.youtube.com/watch?v=4uHTSknGJaY
 
-namespace Core.Communication.Packets
+namespace Communication.Packets
 {
     /// <summary>Packet identifiers</summary>
     public enum PacketCodes

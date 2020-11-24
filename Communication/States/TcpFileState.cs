@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using Core.Communication.Packets;
+using Communication.Packets;
 
-namespace Core.Communication.States
+namespace Communication.States
 {
     public interface ITcpFileState
     {

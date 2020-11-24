@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Communication.Packets;
+using Communication.Packets;
 using Core.Data.Account;
 using Core.Data.File;
 
-namespace Core.Communication.Messages.File
+namespace Communication.Messages.File
 {
     [Serializable]
     public class FileHeaderMessage : SerializedPacket<FileHeaderMessage>, ICdnFile

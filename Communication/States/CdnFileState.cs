@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 using Commons;
-using Core.Communication.Messages;
-using Core.Communication.Messages.File;
-using Core.Communication.Packets;
+using Communication.Messages.File;
+using Communication.Packets;
 
-namespace Core.Communication.States
+namespace Communication.States
 {
     public class CdnFileState : ITcpFileState
     {

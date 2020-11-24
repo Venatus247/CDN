@@ -1,4 +1,4 @@
-namespace Core.Communication.Serialization
+namespace Communication.Serialization
 {
     public interface ISerializable<T> where T: class, ISerializable<T>, new()
     {

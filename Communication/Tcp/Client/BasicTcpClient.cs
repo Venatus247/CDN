@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using Commons;
 
-namespace Core.Communication.Tcp.Client
+namespace Communication.Tcp.Client
 {
     public class BasicTcpClient : BasicTcpCommunication
     {

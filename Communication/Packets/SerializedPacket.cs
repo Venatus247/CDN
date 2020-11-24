@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Core.Communication.Serialization;
+using Communication.Serialization;
 
-namespace Core.Communication.Packets
+namespace Communication.Packets
 {
     [Serializable]
     public class SerializedPacket<T> : ISerializable<T> where T : SerializedPacket<T>, new()

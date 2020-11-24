@@ -1,7 +1,7 @@
-﻿using Core.Communication.Tcp.Server;
+﻿using Communication.Tcp.Server;
 using Core.Data.Cdn;
 
-namespace Core.Communication.Synchronization
+namespace Communication.Synchronization
 {
     public class CdnClientConnection : TcpConnectedClient
     {

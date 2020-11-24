@@ -1,5 +1,5 @@
+using Communication.Synchronization;
 using Core;
-using Core.Communication.Synchronization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
