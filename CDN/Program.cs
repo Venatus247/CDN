@@ -21,6 +21,8 @@ namespace CDN
     {
         public static void Main(string[] args)
         {
+            BackendServer.Instance.OnStartup();
+            
             var cdnClient = new BasicTcpClient(IPAddress.Parse("127.0.0.1"), 4500);
             
             var tempFiles = new Dictionary<string, FileStream>();
@@ -106,7 +108,6 @@ namespace CDN
                 }
             }.ToPacket());
             
-            BackendServer.Instance.OnStartup();
             CreateHostBuilder(args).Build().Run();
         }
 
