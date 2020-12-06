@@ -27,6 +27,7 @@ namespace Core.Data.File
         public DateTime Created { get; set; }
         public DateTime LastModified { get; set; }
         public double Version { get; set; }
+        public List<CdnVersionFileReference> OldFileVersionList { get; set; } = new List<CdnVersionFileReference>();
         public AccessLevel AccessLevel { get; set; } = AccessLevel.Public;
         public AccountReference FileOwner { get; set; }
         public List<AccountReference> GrantedAccounts { get; set; } = new List<AccountReference>();
