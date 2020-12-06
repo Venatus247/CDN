@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Commons;
+using Communication.Data.File;
 using Communication.Messages;
 using Communication.Messages.Authentication;
+using Communication.Messages.File;
 using Communication.Packets;
+using Communication.States;
 using Communication.Tcp.Server;
 using Core.Data.Cdn;
 using Core.Data.File;
@@ -13,11 +18,48 @@ namespace Communication.Synchronization
 {
     public class CdnProxyServer : BasicTcpServer<CdnClientConnection>
     {
+        private readonly List<UploadedFileInfo> _waitingQueue = new List<UploadedFileInfo>();
+        
         public CdnProxyServer(string address, int port) : base(IPAddress.Parse(address), port)
         {
-            
         }
 
+        public async void SaveFile(UploadedFileInfo fileInfo)
+        {
+            if (CdnClientReference.Count == 0)
+            {
+                _waitingQueue.Add(fileInfo);
+                return;
+            }
+
+            var tcpClient = GetBestCdn();
+            
+            tcpClient.SendFile(new CdnFileState(fileInfo.CreateFileHeader(), fileInfo.FileStream));
+        }
+
+        protected override void NewCdnRegisteredCallback(CdnClientConnection client)
+        {
+            base.NewCdnRegisteredCallback(client);
+
+            for (var i = _waitingQueue.Count - 1; i >= 0; i--)
+            {
+                SaveFile(_waitingQueue[i]);
+                _waitingQueue.RemoveAt(i);
+            }
+        }
+
+        private TcpConnectedClient GetBestCdn()
+        {
+            if (CdnClientReference.Count == 0)
+            {
+                return null;
+            }
+            
+            //TODO improve cdn selection
+            var random = new Random();
+            return Clients[CdnClientReference.Select(x => x.Value).ToList()[random.Next(0, CdnClientReference.Count - 1)]];
+        }
+        
         protected override void InvokeClient(CdnClientConnection tClient)
         {
             tClient.Invoke(PacketCodes.CdnAuth, packet =>
@@ -43,14 +85,13 @@ namespace Communication.Synchronization
                     Logger.Info($"Cdn with id '{message.CdnReference.CdnId}' connected.");
                     
                     message.CdnReference.Id = found.Id;
-                    
-                    //CdnController.Instance.Collection.ReplaceOne(x => x.CdnId.Equals(message.CdnReference.CdnId),
-                    //    message.CdnReference);
 
                     tClient.CdnReference = message.CdnReference;
                     
                     CdnClientReference[message.CdnReference.CdnId] = tClient.Id;
                     Clients.Add(tClient.Id, tClient);
+                    
+                    NewCdnRegisteredCallback(tClient);
                 }
                 catch (Exception e)
                 {

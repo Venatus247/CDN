@@ -36,6 +36,7 @@ namespace CDN.Utils.Service
 
                 File.Copy(tempFile, Path.Combine(baseDirectory, savedFile.FileId), false);
 
+                
                 await FileController.Instance.Collection.InsertOneAsync(savedFile);
 
                 return true;

@@ -46,8 +46,6 @@ namespace Communication.Tcp.Server
                 tClient.Prepare(_nextFreeClientId++, client);
 
                 InvokeClient(tClient);
-                
-                //Clients.Add(tClient.Id, tClient);
             }
             catch (Exception e)
             {
@@ -55,6 +53,8 @@ namespace Communication.Tcp.Server
             }
         }
 
+        protected virtual void NewCdnRegisteredCallback(TClient client) {}
+        
         protected virtual void InvokeClient(TClient tClient)
         {
         }

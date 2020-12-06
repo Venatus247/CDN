@@ -5,8 +5,10 @@ using API.Controllers.Models.File;
 using API.Utils.Controller;
 using API.Utils.Service;
 using Commons.Utils;
+using Communication.Data.File;
 using Communication.Messages.File;
 using Communication.States;
+using Communication.Synchronization;
 using Core.Data.Account;
 using Core.Data.File;
 using Core.Utils;
@@ -27,7 +29,6 @@ namespace API.Controllers
         [Route("file/upload")]
         public async Task<IActionResult> Upload([FromForm]FileUploadRequest request)
         {
-
             if (!request.IsComplete())
                 return Incomplete();
 
@@ -46,8 +47,18 @@ namespace API.Controllers
 
             var tempFileStream = await FilesService.SaveTempFileAndGetFileStream(uploadedFile);
             
+            Program.CdnProxyServer.SaveFile(new UploadedFileInfo()
+            {
+                FileId = uploadedFile.FileId,
+                FileName =  uploadedFile.FileName,
+                ContentType = uploadedFile.ContentType,
+                Description = uploadedFile.Description,
+                FileOwner = new AccountReference(request.Account.Id),
+                FileStream = tempFileStream
+            });
+            
             //TODO get cdn dynamically 
-            var cdnTcpConnection = Program.CdnProxyServer.GetClientConnection(1);
+            /*var cdnTcpConnection = Program.CdnProxyServer.GetClientConnection(1);
             cdnTcpConnection.SendFile(new CdnFileState(new FileHeaderMessage()
             {
                 FileId = uploadedFile.FileId,
@@ -60,7 +71,7 @@ namespace API.Controllers
                 AccessLevel = AccessLevel.Public, //TODO set based on user's settings
                 FileOwner = new AccountReference(request.Account.Id),
                 GrantedAccounts = new List<AccountReference>() //TODO set based on user's settings
-            }, tempFileStream));
+            }, tempFileStream));*/
 
             var savedFile = uploadedFile.ToSavedFile(request.Account);
 
