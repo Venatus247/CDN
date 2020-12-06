@@ -38,7 +38,7 @@ namespace API.Controllers
 
             var uploadedFile = new UploadedFile()
             {
-                FileId = FileIdGenerator.Instance.GenerateId(),
+                FileId = UidGenerator.Instance.GenerateId(),
                 FileName = FileUtils.RemoveIllegalCharsFromFileName(request.UploadedFile.FileName),
                 ContentType = request.UploadedFile.ContentType,
                 File = request.UploadedFile

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using API.Controllers;
 using Commons;
@@ -7,6 +8,7 @@ using MongoDB.Driver;
 
 namespace Core.Utils
 {
+    [Obsolete]
     public class FileIdGenerator : Singleton<FileIdGenerator>
     {
         private const int DefaultLength = 8;
