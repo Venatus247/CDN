@@ -11,7 +11,7 @@ namespace Communication.Tcp
 {
     public abstract class BasicTcpCommunication
     {
-        public const int DataBufferSize = 4096;
+        public const int DataBufferSize = 262144; //256kb
         
         protected TcpClient Client;
 

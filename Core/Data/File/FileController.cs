@@ -8,12 +8,15 @@ namespace Core.Data.File
 {
     public class FileController : DatabaseController<FileController, SavedFile>
     {
-        
-        private FileStorageConfiguration FileStorageConfiguration { get; }
+
+        private FileStorageConfiguration FileStorageConfiguration =>
+            _fileStorageConfiguration ??= BackendServer.Instance.ConfigLoader.GetConfiguration<FileStorageConfiguration>();
+
+        private FileStorageConfiguration _fileStorageConfiguration;
 
         protected FileController()
         {
-            FileStorageConfiguration = BackendServer.Instance.ConfigLoader.GetConfiguration<FileStorageConfiguration>();
+            
         }
 
         public async Task<SavedFile> TryGetFile(ICdnFile fileInfo)

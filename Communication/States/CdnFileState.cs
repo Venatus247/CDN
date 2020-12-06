@@ -8,8 +8,8 @@ namespace Communication.States
 {
     public class CdnFileState : ITcpFileState
     {
-        public long DefaultPartLength { get; set; } = 3000;
-        public int PartLength { get; set; } = 3000;
+        public const int DefaultPartLength = 1048576; //1mb
+        public int PartLength { get; set; }
         public long FileLength { get; set; }
         public int CurrentPartIndex { get; set; } = 1;
         public int BytesSent { get; set; } = -1;
@@ -18,8 +18,9 @@ namespace Communication.States
 
         private readonly FileHeaderMessage _fileHeaderMessage;
         
-        public CdnFileState(FileHeaderMessage headerMessage, FileStream fileStream)
+        public CdnFileState(FileHeaderMessage headerMessage, FileStream fileStream, int partLength = DefaultPartLength)
         {
+            PartLength = partLength;
             FileStream = fileStream;
             FileLength = FileStream.Length;
             _fileHeaderMessage = headerMessage;

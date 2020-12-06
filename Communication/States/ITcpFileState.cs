@@ -6,7 +6,7 @@ namespace Communication.States
 {
     public interface ITcpFileState
     {
-        public long DefaultPartLength {get; set; }
+        public const int DefaultPartLength = 3000;
         public int PartLength { get; set; }
 
         public long FileLength { get; set; }
