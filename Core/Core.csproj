@@ -12,8 +12,4 @@
       <ProjectReference Include="..\Commons\Commons.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Communication" />
-    </ItemGroup>
-
 </Project>
