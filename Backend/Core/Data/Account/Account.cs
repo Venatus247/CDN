@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Core.Controller;
+using Core.Data.Account.FileStorage;
 using Core.Data.Session;
 using Core.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
@@ -15,6 +16,8 @@ namespace Core.Data.Account
         public List<MailAddress> AddressHistory { get; private set; } = new List<MailAddress>();
         public List<SessionData> AuthorizedClients { get; private set; } = new List<SessionData>();
         public List<DetailedSessionData> DetailedSessionInfos { get; private set; } = new List<DetailedSessionData>();
+
+        public StorageFolder CloudFolder { get; protected set; } = new StorageFolder();
         
         public void ChangeAddress(MailAddress newAddress)
         {

@@ -9,5 +9,9 @@
       <ProjectReference Include="..\Core\Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\Models\Cloud" />
+    </ItemGroup>
+
 
 </Project>

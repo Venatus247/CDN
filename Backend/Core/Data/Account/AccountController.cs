@@ -1,6 +1,7 @@
 using System;
 using Commons;
 using Core.Controller;
+using Core.Data.Account.FileStorage;
 using Core.Data.Session;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -27,6 +28,12 @@ namespace Core.Data.Account
         private bool AccountMatchesAuthData(Account account, SessionData sessionData)
         {
             return account.IsAuthorized(sessionData);
+        }
+
+        public async void DebugAddFileToCloud(Account account)
+        {
+            account.CloudFolder.Content.Add(new StorageFile("c1d562f3-7502-4c7c-847b-7c04dc413eb9"));
+            await Collection.FindOneAndReplaceAsync(x => x.Id.Equals(account.Id), account);
         }
         
     }
